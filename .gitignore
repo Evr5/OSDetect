@@ -2,3 +2,5 @@
 build
 build-static
 bin
+osdetect_example.exe
+osdetect_example

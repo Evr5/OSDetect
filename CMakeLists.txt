@@ -1,21 +1,15 @@
 cmake_minimum_required(VERSION 3.15)
 
-# === [EDIT HERE TO CHANGE PROJECT NAME] ===
-project(MyProject VERSION 0.1.0 LANGUAGES CXX)
+project(OSDetect VERSION 0.1.0 LANGUAGES CXX)
 
 # Add custom CMake modules path (optional, juust need to include the name of the module)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(spdlog)
 
 # Options
 option(BUILD_STATIC "Link standard libs statically" OFF)
-option(BUILD_TESTS "Build unit tests" ON)
 
 # Export compile_commands.json for LSPs
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# User-defined test directory (can be overridden from CLI or Makefile)
-set(TEST_DIR "${CMAKE_SOURCE_DIR}/tests" CACHE PATH "Path to test directory")
 
 # C++ standard (easily modifiable)
 set(CMAKE_CXX_STANDARD 17)
@@ -61,39 +55,47 @@ endif()
 # Source and include directories
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
 
-# Main executable
-add_executable(${PROJECT_NAME} ${SOURCES})
+# Main library
+add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
 # External libraries target
-target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog_header_only)
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
 endif()
 
-# Include directories 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
-
 # Installation
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
-# Unit tests (preparation)
-if(BUILD_TESTS)
-    enable_testing()
+# Include public headers
+target_include_directories(OSDetect PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
-    file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS ${TEST_DIR}/*.cpp)
+# Installation
+include(GNUInstallDirs)
+install(TARGETS ${PROJECT_NAME}
+    EXPORT OSDetectTargets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-    if(TEST_SOURCES)
-        add_executable(tests ${TEST_SOURCES})
-        target_link_libraries(tests PRIVATE spdlog::spdlog_header_only)
-        target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
+# Prevent exporting dependencies that are not installed
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    EXPORT_EXCLUDE_FROM_ALL TRUE
+)
 
-        # Set the binary in build/tests/
-        set_target_properties(tests PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests
-        )
 
-        add_test(NAME basic_test COMMAND ${CMAKE_BINARY_DIR}/tests/tests)
-    else()
-        message(WARNING "No test files found in ${TEST_DIR}")
-    endif()
-endif()
+# Export for find_package
+install(EXPORT OSDetectTargets
+    FILE OSDetectTargets.cmake
+    NAMESPACE OSDetect::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OSDetect
+)
+
+# Example executable (for testing the library)
+add_executable(osdetect_example examples/main.cpp)
+target_link_libraries(osdetect_example PRIVATE OSDetect)
+target_include_directories(osdetect_example PRIVATE ${CMAKE_SOURCE_DIR}/include)
