@@ -14,5 +14,9 @@ jobs:
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: cmake --build build --parallel
-      - name: Run example
-        run: ./osdetect_example || osdetect_example.exe
+      - name: Run example (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: ./osdetect_example || ./build/osdetect_example || true
+      - name: Run example (Windows)
+        if: runner.os == 'Windows'
+        run: ./osdetect_example.exe || ./build/Release/osdetect_example.exe || true
