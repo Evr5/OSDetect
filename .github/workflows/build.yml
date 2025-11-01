@@ -30,11 +30,14 @@ jobs:
 
       - name: Run example (Linux/macOS)
         if: runner.os != 'Windows'
+        shell: cmd
         run: ./osdetect_example || ./build/osdetect_example || true
 
       - name: Run example (Windows)
         if: runner.os == 'Windows'
-        run: osdetect_example.exe || build\Release\osdetect_example.exe || true
+        shell: cmd
+        run: |
+          .\osdetect_example.exe || .\build\Release\osdetect_example.exe || exit 0
 
   make-build:
     name: Makefile build (Linux)
