@@ -30,7 +30,6 @@ jobs:
 
       - name: Run example (Linux/macOS)
         if: runner.os != 'Windows'
-        shell: cmd
         run: ./osdetect_example || ./build/osdetect_example || true
 
       - name: Run example (Windows)
