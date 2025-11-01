@@ -34,7 +34,7 @@ jobs:
 
       - name: Run example (Windows)
         if: runner.os == 'Windows'
-        run: ./osdetect_example.exe || ./build/Release/osdetect_example.exe || true
+        run: osdetect_example.exe || build\Release\osdetect_example.exe || true
 
   make-build:
     name: Makefile build (Linux)
