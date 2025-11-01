@@ -1,0 +1,50 @@
+name: Build and Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure project with CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build project
+        run: cmake --build build --parallel
+
+      - name: Locate binary
+        run: |
+          echo "Binary location:"
+          ls -R build || true
+          ls -R . || true
+
+      - name: Run example (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: ./osdetect_example || ./build/osdetect_example || true
+
+      - name: Run example (Windows)
+        if: runner.os == 'Windows'
+        run: ./osdetect_example.exe || ./build/Release/osdetect_example.exe || true
+
+  make-build:
+    name: Makefile build (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build using Makefile
+        run: make
+
+      - name: Run example from Makefile build
+        run: ./osdetect_example || true
