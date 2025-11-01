@@ -1,5 +1,6 @@
 # 🧩 OSDetect
 
+[![Build](https://github.com/Evr5/OSDetect/actions/workflows/build.yml/badge.svg)](https://github.com/Evr5/OSDetect/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![C++17](https://img.shields.io/badge/C%2B%2B-11%2B-blue.svg)](https://en.cppreference.com/w/cpp/11)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#)
