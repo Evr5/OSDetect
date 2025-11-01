@@ -30,7 +30,7 @@
 include(FetchContent)
 FetchContent_Declare(
   OSDetect
-  GIT_REPOSITORY https://github.com/<your-username>/OSDetect.git
+  GIT_REPOSITORY https://github.com/Evr5/OSDetect.git
   GIT_TAG main
 )
 FetchContent_MakeAvailable(OSDetect)
