@@ -157,7 +157,7 @@ OSDetect/
 ## ⚙️ Requirements
 
 - **C++11** or newer  
-- **CMake 3.15+**  
+- **CMake 3.12+**  
 - Works with **MSVC**, **GCC** and **Clang** 
 - Cross-platform: Windows / Linux / macOS  
 
