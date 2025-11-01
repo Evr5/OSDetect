@@ -15,4 +15,4 @@ jobs:
       - name: Build
         run: cmake --build build --parallel
       - name: Run example
-        run: ./osdetect_example || .\osdetect_example.exe
+        run: ./osdetect_example || osdetect_example.exe
