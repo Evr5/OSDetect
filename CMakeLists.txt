@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.12)
 
-project(OSDetect VERSION 0.1.0 LANGUAGES CXX)
+project(OSDetect VERSION 1.0.0 LANGUAGES CXX)
 
 # Add custom CMake modules path (optional, juust need to include the name of the module)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -12,7 +12,7 @@ option(BUILD_STATIC "Link standard libs statically" OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # C++ standard (easily modifiable)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
