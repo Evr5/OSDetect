@@ -3,22 +3,20 @@
 
 int main() {
     OSDetect::OS OS = OSDetect::getOS();
-
     std::cout << "Detected OS: " << OS << std::endl;
 
     switch (OS) {
         case OSDetect::OS::Windows:
-            std::cout << "Version: " << OSDetect::getWindowsVersion() << "\n";
+            std::cout << "Windows Version: " << OSDetect::getWindowsVersion() << std::endl;
             break;
         case OSDetect::OS::MacOS:
-            std::cout << "Version: " << OSDetect::getMacOSVersion() << "\n";
+            std::cout << "MacOS Version: " << OSDetect::getMacOSVersion() << std::endl;
             break;
         case OSDetect::OS::Linux:
-            std::cout << "Distro: " << OSDetect::getLinuxDistro() << "\n";
+            std::cout << "Linux Distro: " << OSDetect::getLinuxDistro() << std::endl;
             break;
         default:
-            std::cout << "Version inconnue\n";
+            std::cout << "Unknown Version" << std::endl;
     }
-
     return 0;
 }

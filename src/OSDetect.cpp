@@ -145,7 +145,7 @@ namespace OSDetect {
             case MacOSVersion::Ventura:  return os << "macOS Ventura (13)";
             case MacOSVersion::Sonoma:   return os << "macOS Sonoma (14)";
             case MacOSVersion::Sequoia:  return os << "macOS Sequoia (15)";
-            case MacOSVersion::Tahoe     return os << "macOS Tahoe (26)";
+            case MacOSVersion::Tahoe:    return os << "macOS Tahoe (26)";
             case MacOSVersion::Older:    return os << "Older macOS";
             default:                     return os << "Unknown macOS Version";
         }
