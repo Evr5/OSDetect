@@ -53,10 +53,11 @@ if(WIN32)
 endif()
 
 # Source and include directories
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/OSDetect.cpp)
 
 # Main library
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
+add_library(OSDetect::OSDetect ALIAS ${PROJECT_NAME})
 
 # External libraries target
 if (WIN32)
@@ -97,5 +98,4 @@ install(EXPORT OSDetectTargets
 
 # Example executable (for testing the library)
 add_executable(osdetect_example examples/main.cpp)
-target_link_libraries(osdetect_example PRIVATE OSDetect)
-target_include_directories(osdetect_example PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(osdetect_example PRIVATE OSDetect::OSDetect)

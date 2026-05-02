@@ -32,27 +32,28 @@ namespace OSDetect {
         #if defined(_WIN32)
             typedef LONG (WINAPI *RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
             HMODULE hMod = GetModuleHandleW(L"ntdll.dll");
-            if (hMod) {
-                RtlGetVersionPtr fxRtlGetVersion =
-                    reinterpret_cast<RtlGetVersionPtr>(
-                        reinterpret_cast<void*>(GetProcAddress(hMod, "RtlGetVersion"))
-                    );
-                if (fxRtlGetVersion) {
-                    RTL_OSVERSIONINFOW info = { sizeof(info), 0, 0, 0, 0, {0} };
-                    if (fxRtlGetVersion(&info) == 0) {
-                        if (info.dwMajorVersion == 10 && info.dwBuildNumber >= 22000)
-                            return WindowsVersion::Windows11;
-                        if (info.dwMajorVersion == 10)
-                            return WindowsVersion::Windows10;
-                        if (info.dwMajorVersion == 6 && info.dwMinorVersion == 3)
-                            return WindowsVersion::Windows8;
-                        if (info.dwMajorVersion == 6 && info.dwMinorVersion == 1)
-                            return WindowsVersion::Windows7;
-                        if (info.dwMajorVersion < 6)
-                            return WindowsVersion::Older;
-                    }
-                }
-            }
+            if (!hMod)
+                return WindowsVersion::Unknown;
+
+            auto fxRtlGetVersion = reinterpret_cast<RtlGetVersionPtr>(reinterpret_cast<void (*)()>(GetProcAddress(hMod, "RtlGetVersion")));
+            if (!fxRtlGetVersion)
+                return WindowsVersion::Unknown;
+
+            RTL_OSVERSIONINFOW info = { sizeof(info), 0, 0, 0, 0, {0} };
+            if (fxRtlGetVersion(&info) != 0)
+                return WindowsVersion::Unknown;
+
+            if (info.dwMajorVersion == 10 && info.dwBuildNumber >= 22000)
+                return WindowsVersion::Windows11;
+            if (info.dwMajorVersion == 10)
+                return WindowsVersion::Windows10;
+            if (info.dwMajorVersion == 6 && info.dwMinorVersion == 3)
+                return WindowsVersion::Windows8;
+            if (info.dwMajorVersion == 6 && info.dwMinorVersion == 1)
+                return WindowsVersion::Windows7;
+            if (info.dwMajorVersion < 6)
+                return WindowsVersion::Older;
+
             return WindowsVersion::Unknown;
         #else
             return WindowsVersion::Unknown;
